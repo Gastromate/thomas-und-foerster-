@@ -121,6 +121,7 @@ function App() {
                 handle="chef"
                 status="16 years, professional lines"
                 contactText="Email"
+                showUserInfo={false}
                 behindGlowColor="rgba(184, 92, 31, 0.55)"
                 innerGradient="linear-gradient(145deg,#8A441688 0%,#B85C1F44 100%)"
                 onContactClick={scrollTo('contact')}
@@ -146,6 +147,7 @@ function App() {
                 handle="systems"
                 status="AI Solution Architect"
                 contactText="Email"
+                showUserInfo={false}
                 behindGlowColor="rgba(51, 86, 106, 0.55)"
                 innerGradient="linear-gradient(145deg,#1F3B4A88 0%,#33566A44 100%)"
                 onContactClick={scrollTo('contact')}

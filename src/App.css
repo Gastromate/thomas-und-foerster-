@@ -80,6 +80,7 @@ h2.serif { font-size: clamp(26px, 4vw, 36px); margin: 0 0 8px; text-wrap: balanc
 .founder-card-col { display: flex; justify-content: center; width: 230px; }
 .founder-card-col .pc-card-wrapper { width: 215px; }
 .founder-card-col .pc-card { height: 300px; max-height: 300px; }
+.founder-card-col .pc-details { display: none; }
 .founder-block { padding-top: 8px; min-width: 0; }
 .founder-block .role {
   font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 8px;
