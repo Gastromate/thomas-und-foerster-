@@ -1,0 +1,53 @@
+:root {
+  --paper: #F6F4EF;
+  --paper-raised: #FFFFFF;
+  --ink: #1B1815;
+  --ink-soft: #4A443C;
+  --muted: #8A8172;
+  --line: #DFD9CC;
+  --ember: #B85C1F;
+  --ember-soft: #E8DACB;
+  --steel: #33566A;
+  --steel-soft: #DCE6EA;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #17191A;
+    --paper-raised: #201F1C;
+    --ink: #EDE8E0;
+    --ink-soft: #C7C0B4;
+    --muted: #948C7D;
+    --line: #35322C;
+    --ember: #E08442;
+    --ember-soft: #3A2A1C;
+    --steel: #7FA6BA;
+    --steel-soft: #1D2B31;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #17191A;
+  --paper-raised: #201F1C;
+  --ink: #EDE8E0;
+  --ink-soft: #C7C0B4;
+  --muted: #948C7D;
+  --line: #35322C;
+  --ember: #E08442;
+  --ember-soft: #3A2A1C;
+  --steel: #7FA6BA;
+  --steel-soft: #1D2B31;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  line-height: 1.6;
+}
+#root { min-height: 100vh; }
+
+.serif { font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif; }
+.mono { font-family: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace; }
+a { color: inherit; }
