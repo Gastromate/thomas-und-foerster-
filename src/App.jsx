@@ -8,8 +8,8 @@ import ProfileCard from './components/ProfileCard/ProfileCard';
 import ScrollReveal from './components/ScrollReveal/ScrollReveal';
 import SpecularButton from './components/SpecularButton/SpecularButton';
 
-import avatarAntwann from './assets/avatar-antwann.svg';
-import avatarChristopher from './assets/avatar-christopher.svg';
+import avatarAntwann from './assets/antwann.jpg';
+import avatarChristopher from './assets/christopher.jpg';
 
 const EMBER = '#B85C1F';
 const STEEL = '#33566A';
@@ -76,7 +76,15 @@ function App() {
           </div>
           <p className="lede">We build the one tool your kitchen actually needs — not the one everyone else is already selling.</p>
           <div className="btnrow">
-            <SpecularButton size="lg" onClick={scrollTo('contact')} baseColor="#1B1815" lineColor={ember}>
+            <SpecularButton
+              size="lg"
+              onClick={scrollTo('contact')}
+              tint="#1B1815"
+              tintOpacity={1}
+              textColor="#F6F4EF"
+              baseColor="#1B1815"
+              lineColor={ember}
+            >
               Get in touch
             </SpecularButton>
             <a className="btn-ghost" href="#approach" onClick={scrollTo('approach')}>See how we work</a>

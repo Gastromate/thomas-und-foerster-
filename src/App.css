@@ -65,12 +65,22 @@ h2.serif { font-size: clamp(26px, 4vw, 36px); margin: 0 0 8px; text-wrap: balanc
   color: var(--ink) !important; line-height: 1.5 !important;
 }
 
-/* ---- founders (ProfileCard + bio text) ---- */
-.founders { display: grid; grid-template-columns: 340px 1fr; gap: 40px; align-items: start; }
-.founder-card-col { display: flex; justify-content: center; }
-.founder-card-col .pc-card { height: 420px; max-height: 420px; }
-.founder-block { padding-top: 8px; }
-.founder-block + .founder-block { margin-top: 48px; }
+/* ---- founders (ProfileCard + bio text) ----
+   Card height 300px @ aspect-ratio 0.718 (set by the component itself) renders
+   ~215px wide. The column below is sized to that exact width so the grid
+   track can't be forced wider by the card's intrinsic min-content size —
+   that mismatch was what caused the card to crowd into the text column. */
+.founder-row {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+.founder-row + .founder-row { margin-top: 56px; }
+.founder-card-col { display: flex; justify-content: center; width: 230px; }
+.founder-card-col .pc-card-wrapper { width: 215px; }
+.founder-card-col .pc-card { height: 300px; max-height: 300px; }
+.founder-block { padding-top: 8px; min-width: 0; }
 .founder-block .role {
   font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 8px;
 }
@@ -81,8 +91,6 @@ h2.serif { font-size: clamp(26px, 4vw, 36px); margin: 0 0 8px; text-wrap: balanc
 .founder-block ul { margin: 0; padding: 0; list-style: none; font-size: 13.5px; color: var(--ink-soft); }
 .founder-block li { position: relative; padding-left: 15px; margin-bottom: 7px; }
 .founder-block li::before { content: "—"; position: absolute; left: 0; color: var(--muted); }
-.founder-row { display: grid; grid-template-columns: 240px 1fr; gap: 28px; align-items: start; }
-.founder-row + .founder-row { margin-top: 56px; }
 @media (max-width: 720px) {
   .founder-row { grid-template-columns: 1fr; }
   .founder-row .founder-card-col { justify-content: flex-start; }
