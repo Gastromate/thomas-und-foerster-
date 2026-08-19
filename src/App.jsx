@@ -52,6 +52,26 @@ function App() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const [formStatus, setFormStatus] = useState('idle'); // idle | sending | sent | error
+
+  const handleContactSubmit = async e => {
+    e.preventDefault();
+    setFormStatus('sending');
+    const form = e.target;
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/contact@gastriot.com', {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(form),
+      });
+      if (!res.ok) throw new Error('failed');
+      setFormStatus('sent');
+      form.reset();
+    } catch {
+      setFormStatus('error');
+    }
+  };
+
   return (
     <>
       <div className="particles-fixed">
@@ -132,7 +152,7 @@ function App() {
               baseColor="#1B1815"
               lineColor={ember}
             >
-              Get in touch
+              Book a 15-minute walkthrough
             </SpecularButton>
             <a className="btn-ghost" href="#approach" onClick={scrollTo('approach')}>See how we work</a>
           </div>
@@ -258,6 +278,11 @@ function App() {
               <figcaption>The shopping list writes itself from what's actually low.</figcaption>
             </figure>
           </div>
+
+          <div className="build-cta">
+            <p>This started as one tool for one kitchen. Yours might need something different — or exactly this.</p>
+            <a className="btn-ghost" href="#contact" onClick={scrollTo('contact')}>See if it fits your kitchen</a>
+          </div>
         </div>
       </section>
 
@@ -265,7 +290,7 @@ function App() {
         <div className="shell">
           <div className="label mono">Ways to work with us</div>
           <h2 className="serif">Three shapes an engagement usually takes.</h2>
-          <p className="section-sub">Every project starts the same way — with time on your floor — and settles into whichever of these actually fits what we find.</p>
+          <p className="section-sub">Every project starts the same way — with time on your floor — and settles into whichever of these actually fits what we find. Sometimes that's Gastriot, the tool you just saw. Sometimes it's something we haven't built yet.</p>
 
           <div className="services-swap cardswap-host">
             <CardSwap
@@ -354,18 +379,37 @@ function App() {
           <div className="label mono" style={{ color: 'color-mix(in srgb, var(--paper) 60%, transparent)' }}>Get in touch</div>
           <h2 className="serif">Tell us what's broken. We'll come look.</h2>
           <p className="section-sub">15 minutes on your floor is enough for us to tell you honestly whether there's something worth building.</p>
-          <div className="btnrow">
-            <SpecularButton
-              size="lg"
-              baseColor="#F6F4EF"
-              lineColor={ember}
-              textColor="#F6F4EF"
-              onClick={() => { window.location.href = 'mailto:contact@gastriot.com'; }}
-            >
-              Email us
-            </SpecularButton>
-            <a className="btn-ghost" href="#approach" onClick={scrollTo('approach')}>Back to top</a>
-          </div>
+
+          {formStatus === 'sent' ? (
+            <div className="contact-sent">
+              <p>Got it — we'll get back to you within a day.</p>
+            </div>
+          ) : (
+            <form className="contact-form" onSubmit={handleContactSubmit}>
+              <input type="hidden" name="_subject" value="New inquiry — Förster & Thomas" />
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_template" value="table" />
+              <div className="contact-form-row">
+                <input name="name" type="text" placeholder="Your name" required />
+                <input name="restaurant" type="text" placeholder="Restaurant / kitchen" required />
+              </div>
+              <div className="contact-form-row">
+                <input name="email" type="email" placeholder="Email" required />
+                <input name="phone" type="tel" placeholder="Phone (optional)" />
+              </div>
+              <textarea name="message" placeholder="What's costing you the most right now?" rows={3} required />
+              <div className="btnrow">
+                <button className="btn-solid" type="submit" disabled={formStatus === 'sending'}>
+                  {formStatus === 'sending' ? 'Sending…' : 'Request a walkthrough'}
+                </button>
+                <a className="btn-ghost" href="#approach" onClick={scrollTo('approach')}>Back to top</a>
+              </div>
+              {formStatus === 'error' && (
+                <p className="contact-form-error">Something went wrong — email us directly at contact@gastriot.com instead.</p>
+              )}
+            </form>
+          )}
+
           <div className="contact-details">Antwann Thomas &amp; Christopher Förster &nbsp;·&nbsp; contact@gastriot.com &nbsp;·&nbsp; Berlin, DE</div>
         </div>
       </section>
