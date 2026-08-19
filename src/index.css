@@ -37,8 +37,14 @@
   --steel-soft: #1D2B31;
 }
 
+/* No overflow-x:hidden on html/body here — either one becomes a scroll
+   container the moment it's set (even just on the x-axis, since the CSS
+   overflow spec auto-converts the other axis from visible to auto), which
+   breaks position:sticky for everything nested inside (.dive-stage never
+   actually pins, it just scrolls off normally with its tall parent).
+   .dive-stage's own `overflow: hidden` already contains any horizontal
+   bleed from the translateZ transforms, so this isn't needed here. */
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
 body {
   background: var(--paper);
   color: var(--ink);

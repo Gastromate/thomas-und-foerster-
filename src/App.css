@@ -1,6 +1,6 @@
 /* ---- nav ---- */
 .nav {
-  position: sticky; top: 0; z-index: 10;
+  position: sticky; top: 0; z-index: 200;
   display: flex; justify-content: space-between; align-items: center;
   padding: 18px clamp(20px, 5vw, 64px);
   background: color-mix(in srgb, var(--paper) 88%, transparent);
@@ -17,28 +17,90 @@
 .nav a:hover { color: var(--ink); }
 @media (max-width: 720px) { .nav ul { display: none; } }
 
-/* ---- hero ---- */
-.hero { position: relative; overflow: hidden; padding: clamp(70px,12vw,130px) clamp(20px,6vw,64px) clamp(50px,8vw,90px); background: radial-gradient(ellipse 80% 60% at 50% 30%, color-mix(in srgb, var(--steel) 7%, transparent), transparent); }
-.hero-waves { position: absolute; inset: 0; z-index: 0; }
+/* ---- hero: fixed dark ground, not theme-linked, so it opens black/dark-grey
+   regardless of light/dark mode (the site's --ink token flips light in dark
+   mode, which would defeat the point here). ---- */
+.hero {
+  position: relative; overflow: hidden;
+  padding: clamp(70px,12vw,130px) clamp(20px,6vw,64px) clamp(50px,8vw,90px);
+  background: #15130F radial-gradient(ellipse 80% 60% at 50% 20%, color-mix(in srgb, var(--ember) 12%, transparent), transparent);
+}
 .hero-inner { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; text-align: center; }
-@media (prefers-reduced-motion: reduce) { .hero-waves { display: none; } }
 .hero .eyebrow {
-  font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: color-mix(in srgb, #F6F4EF 65%, transparent);
   margin-bottom: 18px;
 }
 .hero-particle-text { width: 100%; max-width: 820px; height: clamp(160px, 22vw, 260px); margin: 0 auto 22px; }
 
-/* ---- react-bits: Particles background (fixed, full-page) ---- */
-.particles-fixed {
+/* ---- Vanta NET background (fixed, full-page, reconfigured per section) ---- */
+.vanta-fixed {
   position: fixed; inset: 0; width: 100vw; height: 100vh;
   pointer-events: none; z-index: 50; mix-blend-mode: soft-light; opacity: 0.9;
 }
-@media (prefers-reduced-motion: reduce) { .particles-fixed { display: none; } }
+@media (prefers-reduced-motion: reduce) { .vanta-fixed { display: none; } }
+
+/* ---- dive scene: the viewport pins (dive-stage, position: sticky) and
+   holds still while scroll drives a virtual camera through Z-positioned
+   layers (see useDiveScene) — real forward travel, not a vertical slide.
+   Dense sections are condensed (.dive-compact, tighter type/spacing below)
+   specifically so they fit one screen without needing internal scroll. */
+.dive-track { position: relative; height: 600vh; }
+.dive-stage {
+  position: sticky; top: 0; height: 100vh; overflow: hidden;
+  perspective: 1600px; perspective-origin: 50% 50%;
+}
+.dive-layer {
+  position: absolute; inset: 0;
+  overflow-y: auto; overflow-x: hidden;
+  scrollbar-gutter: stable;
+  padding-top: 76px; /* clears the fixed/sticky nav */
+  transform-origin: 50% 50%;
+  will-change: transform, opacity, filter;
+}
+.dive-layer.hero,
+.dive-layer.thesis-band,
+.dive-layer.contact-band { display: flex; align-items: center; }
+.dive-layer.hero .hero-inner,
+.dive-layer.thesis-band .shell,
+.dive-layer.contact-band .shell { width: 100%; }
+
+/* ---- dive-compact: condensed sizing so founders / build / services /
+   contact each fit inside one pinned screen without scrolling internally.
+   padding-top stays >= .dive-layer's 76px nav clearance — overriding it
+   down to the same small value as padding-bottom let headings render
+   partly behind the fixed nav bar. */
+.dive-compact { padding-top: clamp(84px,10vw,96px); padding-bottom: clamp(20px,4vw,32px); }
+.dive-compact .section-sub { margin-bottom: 20px; }
+.dive-compact h2.serif { font-size: clamp(22px, 3vw, 28px); margin-bottom: 4px; }
+.dive-compact .label { margin-bottom: 8px; }
+
+.dive-compact.build-section .build-gallery { margin-top: 18px; gap: 14px; }
+.dive-compact.build-section .build-shot img { max-height: 220px; object-fit: cover; }
+.dive-compact.build-section .build-cta { margin-top: 20px; padding-top: 18px; }
+
+.dive-compact#approach .founders-grid { gap: 32px; margin-top: 4px; }
+.dive-compact#approach .founder-card-col { width: 150px; }
+.dive-compact#approach .founder-card-col .pc-card-wrapper { width: 150px; }
+.dive-compact#approach .founder-card-col .pc-card { height: 200px; max-height: 200px; }
+.dive-compact#approach .proof-bar { margin-top: 20px; padding: 14px 20px; }
+
+.dive-compact#services .engagement-grid { gap: 32px; }
+.dive-compact#services .services-swap { width: 300px; height: 260px; margin-bottom: 0; }
+.dive-compact#services .howwework-swap { width: 300px; height: 190px; margin-bottom: 0; }
+.dive-compact#services .forwho { margin-top: 16px; gap: 8px; }
+.dive-compact#services .forwho span { padding: 6px 12px; font-size: 12.5px; }
+
+.dive-compact.contact-band .contact-form { gap: 10px; }
+.dive-compact.contact-band .contact-form input,
+.dive-compact.contact-band .contact-form textarea { padding: 10px 14px; }
+.dive-compact.contact-band .contact-details { margin-top: 18px; }
 
 .hero .lede {
-  font-size: clamp(17px, 2.2vw, 21px); color: var(--ink-soft); font-style: italic;
+  font-size: clamp(17px, 2.2vw, 21px); color: color-mix(in srgb, #F6F4EF 82%, transparent); font-style: italic;
   max-width: 56ch; margin: 0 auto 34px; text-wrap: balance;
 }
+.hero .btn-ghost { border-color: color-mix(in srgb, #F6F4EF 30%, transparent); color: #F6F4EF; }
 .btnrow { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 .btn-ghost {
   display: inline-block; padding: 13px 26px; border-radius: 999px; text-decoration: none;
@@ -81,8 +143,14 @@ h2.serif { font-size: clamp(26px, 4vw, 36px); margin: 0 0 8px; text-wrap: balanc
    so their CardSwap host sits left-aligned under the column's own heading
    instead of centered, except on the mobile stacked layout where centering
    reads better for a single column. */
-.engagement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
-.engagement-col .cardswap-host { margin-top: 36px; margin-left: 0; margin-right: 0; }
+/* Columns stretch to equal height and each is a flex column with its
+   CardSwap deck pushed to the bottom — that's what actually guarantees the
+   two decks land on the same level, since one column's heading/copy block
+   is naturally shorter than the other's. */
+.engagement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: stretch; }
+.engagement-col { display: flex; flex-direction: column; }
+.engagement-col .section-sub { margin-bottom: 18px; }
+.engagement-col .cardswap-host { margin-top: auto; padding-top: 14px; margin-left: 0; margin-right: 0; }
 
 /* Below 640px the CardSwap width/height PROPS themselves switch to smaller
    values (set in App.jsx via useIsMobile — they're inline styles from the
@@ -92,7 +160,7 @@ h2.serif { font-size: clamp(26px, 4vw, 36px); margin: 0 0 8px; text-wrap: balanc
    around the card, so it's re-centered here instead. */
 @media (max-width: 640px) {
   .engagement-grid { grid-template-columns: 1fr; gap: 56px; }
-  .engagement-col .cardswap-host { margin-top: 36px; margin-left: auto; margin-right: auto; }
+  .engagement-col .cardswap-host { margin-top: auto; padding-top: 14px; margin-left: auto; margin-right: auto; }
   .services-swap { width: 300px; height: 470px; margin-bottom: 120px; }
   .howwework-swap { width: 300px; height: 330px; margin-bottom: 95px; }
   .cardswap-host .card-swap-container {
