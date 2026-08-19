@@ -73,9 +73,16 @@ h2.serif { font-size: clamp(26px, 4vw, 36px); margin: 0 0 8px; text-wrap: balanc
    anchor into — sized a bit taller/wider than the card itself so the
    diagonal stack of cards behind the front one has room to show. */
 .cardswap-host { position: relative; margin: 0 auto; }
-.founders-swap { width: 340px; height: 460px; margin-bottom: 130px; }
-.services-swap { width: 500px; height: 460px; margin-bottom: 110px; }
-.howwework-swap { width: 480px; height: 380px; margin-bottom: 115px; }
+.services-swap { width: 370px; height: 540px; margin-bottom: 110px; }
+.howwework-swap { width: 360px; height: 410px; margin-bottom: 80px; }
+
+/* "Ways to work with us" and "How we work" sit side by side sharing one
+   screen area, each with its own heading/copy and its cards directly under —
+   so their CardSwap host sits left-aligned under the column's own heading
+   instead of centered, except on the mobile stacked layout where centering
+   reads better for a single column. */
+.engagement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.engagement-col .cardswap-host { margin-top: 36px; margin-left: 0; margin-right: 0; }
 
 /* Below 640px the CardSwap width/height PROPS themselves switch to smaller
    values (set in App.jsx via useIsMobile — they're inline styles from the
@@ -84,7 +91,8 @@ h2.serif { font-size: clamp(26px, 4vw, 36px); margin: 0 0 8px; text-wrap: balanc
    anchor also drifts badly off-center once the host isn't a tight fit
    around the card, so it's re-centered here instead. */
 @media (max-width: 640px) {
-  .founders-swap { width: 220px; height: 360px; margin-bottom: 90px; }
+  .engagement-grid { grid-template-columns: 1fr; gap: 56px; }
+  .engagement-col .cardswap-host { margin-top: 36px; margin-left: auto; margin-right: auto; }
   .services-swap { width: 300px; height: 470px; margin-bottom: 120px; }
   .howwework-swap { width: 300px; height: 330px; margin-bottom: 95px; }
   .cardswap-host .card-swap-container {
@@ -101,8 +109,6 @@ h2.serif { font-size: clamp(26px, 4vw, 36px); margin: 0 0 8px; text-wrap: balanc
   border: 1px solid var(--line);
   box-shadow: 0 20px 40px -18px color-mix(in srgb, var(--ink) 20%, transparent);
 }
-.founders-swap .card { background: var(--ink); border: none; }
-.founders-swap .card,
 .services-swap .card,
 .howwework-swap .card {
   overflow: hidden;
@@ -127,19 +133,13 @@ h2.serif { font-size: clamp(26px, 4vw, 36px); margin: 0 0 8px; text-wrap: balanc
 }
 .swap-card-body.step-body .t { font-size: 15.5px; color: var(--ink-soft); }
 
-/* founders: plain photo card, no ProfileCard chrome — the founder-swap deck
-   is a rotating visual only, both founders' full bios stay below it */
-.photo-card { position: relative; width: 100%; height: 100%; }
-.photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.photo-card .cap {
-  position: absolute; left: 0; right: 0; bottom: 0; padding: 16px 18px;
-  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-  color: #fff;
-}
-.photo-card .cap .n { font-size: 16px; font-weight: 700; }
-.photo-card .cap .r { font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; margin-top: 2px; }
-
-.founders-bios { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+/* ---- founders (holographic ProfileCard floating above its own bio) ---- */
+.founders-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.founder-col { display: flex; flex-direction: column; align-items: flex-start; gap: 26px; }
+.founder-card-col { width: 220px; }
+.founder-card-col .pc-card-wrapper { width: 220px; }
+.founder-card-col .pc-card { height: 300px; max-height: 300px; }
+.founder-card-col .pc-details { display: none; }
 .founder-block .role {
   font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 8px;
 }
@@ -150,7 +150,8 @@ h2.serif { font-size: clamp(26px, 4vw, 36px); margin: 0 0 8px; text-wrap: balanc
 .founder-block li { position: relative; padding-left: 15px; margin-bottom: 7px; }
 .founder-block li::before { content: "—"; position: absolute; left: 0; color: var(--muted); }
 @media (max-width: 720px) {
-  .founders-bios { grid-template-columns: 1fr; gap: 32px; }
+  .founders-grid { grid-template-columns: 1fr; gap: 40px; }
+  .founder-col { align-items: center; text-align: left; }
 }
 
 /* ---- proof (real DepthText) ---- */
