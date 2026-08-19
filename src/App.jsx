@@ -24,10 +24,23 @@ function useThemeColor(varName, fallback) {
   return value;
 }
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return isMobile;
+}
+
 function App() {
   const ember = useThemeColor('--ember', EMBER);
   const steel = useThemeColor('--steel', STEEL);
   const paper = useThemeColor('--paper', '#F6F4EF');
+  const isMobile = useIsMobile();
 
   const scrollTo = id => e => {
     e.preventDefault();
@@ -141,7 +154,14 @@ function App() {
           <p className="section-sub">Sixteen years on professional lines meets AI systems built for real production use — that's the whole firm.</p>
 
           <div className="founders-swap cardswap-host">
-            <CardSwap width={240} height={320} cardDistance={26} verticalDistance={36} delay={5000} pauseOnHover>
+            <CardSwap
+              width={isMobile ? 175 : 240}
+              height={isMobile ? 245 : 320}
+              cardDistance={isMobile ? 15 : 26}
+              verticalDistance={isMobile ? 20 : 36}
+              delay={5000}
+              pauseOnHover
+            >
               <Card>
                 <div className="photo-card">
                   <img src={avatarAntwann} alt="Antwann Thomas" />
@@ -211,7 +231,14 @@ function App() {
           <p className="section-sub">Every project starts the same way — with time on your floor — and settles into whichever of these actually fits what we find.</p>
 
           <div className="services-swap cardswap-host">
-            <CardSwap width={360} height={260} cardDistance={34} verticalDistance={46} delay={4500} pauseOnHover>
+            <CardSwap
+              width={isMobile ? 250 : 360}
+              height={isMobile ? 340 : 260}
+              cardDistance={isMobile ? 18 : 34}
+              verticalDistance={isMobile ? 25 : 46}
+              delay={4500}
+              pauseOnHover
+            >
               <Card>
                 <div className="swap-card-body">
                   <span className="tag mono">Audit</span>
@@ -246,7 +273,14 @@ function App() {
           <div className="label mono">How we work</div>
           <h2 className="serif">No off-the-shelf software. Ever.</h2>
           <div className="howwework-swap cardswap-host">
-            <CardSwap width={360} height={200} cardDistance={30} verticalDistance={40} delay={4000} pauseOnHover>
+            <CardSwap
+              width={isMobile ? 250 : 360}
+              height={isMobile ? 230 : 200}
+              cardDistance={isMobile ? 16 : 30}
+              verticalDistance={isMobile ? 22 : 40}
+              delay={4000}
+              pauseOnHover
+            >
               <Card>
                 <div className="swap-card-body step-body">
                   <span className="n mono">1</span>
