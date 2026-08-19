@@ -30,12 +30,19 @@ const LAYER_IDS = ['hero', 'thesis', 'approach', 'build', 'services', 'contact']
 //
 // Any layer taller than the screen (founders' bios, the build gallery,
 // services' two card decks) just scrolls internally like a normal page —
-// only the currently-centered layer is ever marked scrollable
-// (data-lenis-prevent + overflow-y:auto), so Lenis routes wheel/touch to it
-// first and only advances the dive once it's exhausted. Every other layer
-// stays overflow:hidden — leaving all six permanently scrollable at once
-// (they're stacked, absolute, full-viewport) made Lenis treat the whole
-// screen as "nested scrollable content" and the outer dive never advanced.
+// on non-touch devices, only the currently-centered layer is ever marked
+// scrollable (data-lenis-prevent + overflow-y:auto), so Lenis routes wheel
+// input to it first and only advances the dive once it's exhausted.
+//
+// That toggle is skipped entirely on touch devices. Browsers decide which
+// element a touch gesture scrolls at touchstart; flipping overflow-y to
+// 'auto' mid-swipe doesn't retarget an already-started gesture, so the
+// moment a layer became "active" mid-scroll, Lenis would block the outer
+// dive (data-lenis-prevent) while the inner overflow never actually
+// engaged (the gesture's target was already locked elsewhere) — scroll
+// just stopped, which is what was happening on iPhone at the founders
+// panel. Every section is sized to fit one screen (see .dive-compact in
+// App.css) specifically so touch devices never need this fallback.
 export function useDiveScene() {
   const bgRef = useRef(null);
   const lenisRef = useRef(null);
@@ -61,6 +68,7 @@ export function useDiveScene() {
 
     const lenis = new Lenis({ autoRaf: false });
     lenisRef.current = lenis;
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
     let vanta = null;
     if (bgRef.current) {
@@ -128,12 +136,14 @@ export function useDiveScene() {
         el.style.zIndex = String(zIndex);
         el.style.pointerEvents = opacity < 0.15 ? 'none' : 'auto';
 
-        const isActive = Math.abs(norm) < 0.12;
-        if (isActive !== prevActive[i]) {
-          prevActive[i] = isActive;
-          el.style.overflowY = isActive ? 'auto' : 'hidden';
-          if (isActive) el.setAttribute('data-lenis-prevent', '');
-          else el.removeAttribute('data-lenis-prevent');
+        if (!isTouch) {
+          const isActive = Math.abs(norm) < 0.12;
+          if (isActive !== prevActive[i]) {
+            prevActive[i] = isActive;
+            el.style.overflowY = isActive ? 'auto' : 'hidden';
+            if (isActive) el.setAttribute('data-lenis-prevent', '');
+            else el.removeAttribute('data-lenis-prevent');
+          }
         }
       });
 

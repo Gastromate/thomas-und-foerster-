@@ -113,6 +113,7 @@ function App() {
             />
           </div>
           <p className="lede">We build the one tool your kitchen actually needs — not the one everyone else is already selling.</p>
+          <p className="hero-tagline mono">We sell measured margin recovery — automated.</p>
           <div className="btnrow">
             <SpecularButton
               size="lg"
@@ -256,10 +257,10 @@ function App() {
 
               <div className="services-swap cardswap-host">
                 <CardSwap
-                  width={isMobile ? 250 : 280}
-                  height={isMobile ? 300 : 260}
-                  cardDistance={isMobile ? 14 : 16}
-                  verticalDistance={isMobile ? 14 : 18}
+                  width={isMobile ? 220 : 280}
+                  height={isMobile ? 148 : 260}
+                  cardDistance={isMobile ? 8 : 16}
+                  verticalDistance={isMobile ? 8 : 18}
                   delay={4500}
                   pauseOnHover
                 >
@@ -296,10 +297,10 @@ function App() {
               <h2 className="serif">No off-the-shelf software. Ever.</h2>
               <div className="howwework-swap cardswap-host">
                 <CardSwap
-                  width={isMobile ? 250 : 280}
-                  height={isMobile ? 205 : 190}
-                  cardDistance={isMobile ? 14 : 18}
-                  verticalDistance={isMobile ? 18 : 22}
+                  width={isMobile ? 220 : 280}
+                  height={isMobile ? 108 : 190}
+                  cardDistance={isMobile ? 6 : 18}
+                  verticalDistance={isMobile ? 6 : 22}
                   delay={4000}
                   pauseOnHover
                 >

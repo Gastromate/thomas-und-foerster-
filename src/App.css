@@ -96,9 +96,66 @@
 .dive-compact.contact-band .contact-form textarea { padding: 10px 14px; }
 .dive-compact.contact-band .contact-details { margin-top: 18px; }
 
+/* iPhone-height dive-compact: the 800-900px desktop budget this was tuned
+   against doesn't exist on a phone (often <700px of *visible* viewport once
+   Safari's toolbar is accounted for). Founders in particular needs to fit
+   here without ever falling back to internal scroll — touch-scroll chaining
+   from a nested overflow:auto layer back out to the pinned dive is a known
+   fragile interaction on iOS Safari (this is what was causing the stuck
+   scroll on the founders panel), so the fix is to not depend on it at all. */
+@media (max-width: 640px) {
+  .dive-compact { padding-top: clamp(72px,20vw,80px); padding-bottom: 10px; }
+  .dive-compact h2.serif { font-size: 18px; line-height: 1.2; margin-bottom: 2px; }
+  .dive-compact .section-sub { margin-bottom: 10px; font-size: 13px; }
+  .dive-compact .label { margin-bottom: 6px; font-size: 10px; }
+
+  .dive-compact#approach .founders-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 0; }
+  .dive-compact#approach .founder-col { flex-direction: row; align-items: center; gap: 12px; }
+  .dive-compact#approach .founder-card-col { width: 64px; flex-shrink: 0; }
+  .dive-compact#approach .founder-card-col .pc-card-wrapper { width: 64px; }
+  .dive-compact#approach .founder-card-col .pc-card { height: 84px; max-height: 84px; }
+  .dive-compact#approach .founder-block { min-width: 0; }
+  .dive-compact#approach .founder-block .role { font-size: 9px; margin-bottom: 2px; }
+  .dive-compact#approach .founder-block p.bio { font-size: 11.5px; line-height: 1.3; margin: 0; }
+  .dive-compact#approach .proof-bar { margin-top: 8px; padding: 8px 10px; gap: 8px; }
+  .dive-compact#approach .proof-bar .desc { font-size: 10.5px; }
+
+  .dive-compact.build-section .build-gallery { grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 8px; }
+  .dive-compact.build-section .build-shot figcaption { display: none; }
+  .dive-compact.build-section .build-cta { margin-top: 10px; padding-top: 8px; }
+  .dive-compact.build-section .build-cta p { display: none; }
+
+  .dive-compact#services .engagement-grid { grid-template-columns: 1fr; gap: 2px; }
+  .dive-compact#services .engagement-col .cardswap-host { margin-top: 30px !important; padding-top: 0; }
+  .dive-compact#services .services-swap,
+  .dive-compact#services .howwework-swap { margin: 0 auto; }
+  .dive-compact#services .services-swap { width: 220px; height: 148px; }
+  .dive-compact#services .howwework-swap { width: 220px; height: 108px; }
+  .dive-compact#services .label[style] { margin-top: 4px !important; }
+  .dive-compact#services .forwho { margin-top: 2px; gap: 5px; }
+  .dive-compact#services .forwho span { font-size: 10px; padding: 3px 8px; }
+  .dive-compact#services .swap-card-body { padding: 12px 14px; gap: 3px; }
+  .dive-compact#services .swap-card-body .tag { font-size: 9px; padding: 2px 7px; }
+  .dive-compact#services .swap-card-body h3 { font-size: 14px; margin: 1px 0 0; }
+  .dive-compact#services .swap-card-body p { font-size: 11px; line-height: 1.25; }
+  .dive-compact#services .swap-card-body .meta { font-size: 9.5px; padding-top: 5px; }
+  .dive-compact#services .swap-card-body.step-body { gap: 10px; }
+  .dive-compact#services .swap-card-body.step-body .t { font-size: 12px; line-height: 1.25; }
+  .dive-compact#services .swap-card-body.step-body .n { width: 24px; height: 24px; font-size: 11px; }
+
+  .dive-compact.contact-band .contact-form { gap: 8px; }
+  .dive-compact.contact-band .contact-form-row { gap: 8px; }
+  .dive-compact.contact-band textarea { min-height: 40px; }
+  .dive-compact.contact-band .contact-details { margin-top: 10px; font-size: 12px; }
+}
+
 .hero .lede {
   font-size: clamp(17px, 2.2vw, 21px); color: color-mix(in srgb, #F6F4EF 82%, transparent); font-style: italic;
-  max-width: 56ch; margin: 0 auto 34px; text-wrap: balance;
+  max-width: 56ch; margin: 0 auto 14px; text-wrap: balance;
+}
+.hero .hero-tagline {
+  font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ember); margin: 0 0 30px;
 }
 .hero .btn-ghost { border-color: color-mix(in srgb, #F6F4EF 30%, transparent); color: #F6F4EF; }
 .btnrow { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
