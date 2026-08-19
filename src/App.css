@@ -161,6 +161,33 @@ h2.serif { font-size: clamp(26px, 4vw, 36px); margin: 0 0 8px; text-wrap: balanc
 .proof-bar .stat { font-family: ui-monospace, monospace; }
 .proof-bar .desc { font-size: 14px; color: var(--ink-soft); }
 
+/* ---- build (real Gastriot screenshots) ---- */
+.build-section { background: var(--paper-raised); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.build-gallery {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 36px;
+}
+.build-shot {
+  margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0;
+}
+.build-shot img {
+  width: 100%; max-width: 100%; display: block; border-radius: 16px;
+  border: 1px solid var(--line);
+  box-shadow: 0 16px 32px -20px color-mix(in srgb, var(--ink) 30%, transparent);
+}
+.build-shot:first-child img { border: 1.5px solid var(--ember); }
+.build-shot figcaption {
+  font-size: 12.5px; color: var(--ink-soft); line-height: 1.4; padding: 0 2px;
+}
+@media (max-width: 900px) {
+  .build-gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .build-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 340px; margin-left: auto; margin-right: auto; }
+}
+
 /* ---- for-who ---- */
 .forwho { display: flex; gap: 12px; flex-wrap: wrap; }
 .forwho span {

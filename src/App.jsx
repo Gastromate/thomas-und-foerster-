@@ -12,6 +12,11 @@ import CardSwap, { Card } from './components/CardSwap/CardSwap';
 
 import avatarAntwann from './assets/antwann.jpg';
 import avatarChristopher from './assets/christopher.jpg';
+import gastriotWaste from './assets/gastriot/waste.png';
+import gastriotHome from './assets/gastriot/home.png';
+import gastriotInventory from './assets/gastriot/inventory.png';
+import gastriotPos from './assets/gastriot/pos.png';
+import gastriotOrders from './assets/gastriot/orders.png';
 
 const EMBER = '#B85C1F';
 const STEEL = '#33566A';
@@ -67,6 +72,7 @@ function App() {
         </div>
         <ul>
           <li><a href="#approach" onClick={scrollTo('approach')}>Approach</a></li>
+          <li><a href="#build" onClick={scrollTo('build')}>Build</a></li>
           <li><a href="#services" onClick={scrollTo('services')}>Services</a></li>
           <li><a href="#proof" onClick={scrollTo('proof')}>Proof</a></li>
         </ul>
@@ -220,6 +226,37 @@ function App() {
               />
             </span>
             <span className="desc">SummerUp Hackathon, Berlin 2026 — the only solo entrant to place, in his first hackathon.</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="build" className="build-section">
+        <div className="shell">
+          <div className="label mono">What we've actually built</div>
+          <h2 className="serif">Not a mockup. This runs in a Berlin kitchen right now.</h2>
+          <p className="section-sub">Gastriot — live inventory, waste tracked against a target, margin per dish, a shopping list that fills itself. Built by the same two people you'd be working with, used in service every day.</p>
+
+          <div className="build-gallery">
+            <figure className="build-shot">
+              <img src={gastriotWaste} alt="Gastriot waste-logging screen, weighing a portion against its target with live variance" loading="lazy" />
+              <figcaption>Waste logged against a target the moment it happens — not counted at the end of the week.</figcaption>
+            </figure>
+            <figure className="build-shot">
+              <img src={gastriotHome} alt="Gastriot dashboard showing today's revenue, waste, food cost and inventory value" loading="lazy" />
+              <figcaption>Today's numbers, not last month's report.</figcaption>
+            </figure>
+            <figure className="build-shot">
+              <img src={gastriotInventory} alt="Gastriot inventory screen with expiry alerts and par-level warnings" loading="lazy" />
+              <figcaption>Every ingredient, with what's expiring and what's low.</figcaption>
+            </figure>
+            <figure className="build-shot">
+              <img src={gastriotPos} alt="Gastriot menu screen showing each dish's price and live margin" loading="lazy" />
+              <figcaption>Margin per dish, not just per month.</figcaption>
+            </figure>
+            <figure className="build-shot">
+              <img src={gastriotOrders} alt="Gastriot shopping list, auto-populated from items below par" loading="lazy" />
+              <figcaption>The shopping list writes itself from what's actually low.</figcaption>
+            </figure>
           </div>
         </div>
       </section>
