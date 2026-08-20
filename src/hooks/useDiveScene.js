@@ -47,7 +47,7 @@ const COLOR_STOPS = [
   { at: 0.00, rgb: hexToRgb('#E8A15C') }, // hero (dark)
   { at: 0.20, rgb: hexToRgb('#1E6E8F') }, // thesis (light) — saturated teal-steel
   { at: 0.40, rgb: hexToRgb('#B85C1F') }, // approach (light) — ember
-  { at: 0.60, rgb: hexToRgb('#14526B') }, // build (light) — deep saturated teal
+  { at: 0.60, rgb: hexToRgb('#00FF41') }, // build (light) — matrix green, what we've actually built
   { at: 0.80, rgb: hexToRgb('#D98F52') }, // services (light) — warm ember
   { at: 1.00, rgb: hexToRgb('#E8A15C') }, // contact (dark)
 ];
@@ -146,6 +146,16 @@ export function useDiveScene() {
     let prevColor = NaN;
     let lastColorUpdate = 0;
 
+    // Dots don't track setOptions() the way lines do (Vanta paints each dot's
+    // material once at creation and never revisits it — only the line
+    // geometry's vertex colors get recomputed every frame from
+    // this.options.color). So dots need to be recolored by hand: normally
+    // they just follow the same gradient tone as the lines, but the "build"
+    // section — what we've actually shipped — gets a deliberate two-tone
+    // matrix look, green lines against white nodes, while it's on screen.
+    const buildHome = LAYER_IDS.indexOf('build') * step;
+    let prevDotColor = NaN;
+
     let raf = null;
 
     function tick(time) {
@@ -171,6 +181,13 @@ export function useDiveScene() {
           // toward defaults, which was silently blanking the net out at
           // some scroll depths.
           vanta.setOptions({ color: col, ...NET_BASE_OPTIONS });
+        }
+
+        const buildNorm = clamp((progress - buildHome) / homeWindow, -1, 1);
+        const dotCol = Math.abs(buildNorm) < 0.6 ? 0xffffff : col;
+        if (dotCol !== prevDotColor && Array.isArray(vanta.points)) {
+          prevDotColor = dotCol;
+          vanta.points.forEach(pt => pt?.material?.color?.setHex(dotCol));
         }
       }
 
