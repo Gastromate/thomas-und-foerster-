@@ -17,10 +17,53 @@ const NET = unwrapDefault(NETModule);
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const smoothstep = t => t * t * (3 - 2 * t);
-const hexToNum = hex => parseInt(hex.replace('#', ''), 16);
 
-const NET_TINT = '#D98F52';
 const LAYER_IDS = ['hero', 'thesis', 'approach', 'build', 'services', 'contact'];
+
+// The net's color shifts continuously with scroll depth rather than
+// snapping per section — one space, just one whose light changes as you
+// move through it. Stops line up roughly with each layer's home position;
+// the two dark layers (hero, contact) get the lighter tint so it still
+// reads against their dark backgrounds via the soft-light blend, while the
+// light-paper layers between them swing through the brand's ember/steel
+// pair for variation.
+const hexToRgb = hex => {
+  const n = parseInt(hex.replace('#', ''), 16);
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+};
+const lerpRgb = (a, b, t) => ({
+  r: Math.round(lerp(a.r, b.r, t)),
+  g: Math.round(lerp(a.g, b.g, t)),
+  b: Math.round(lerp(a.b, b.b, t)),
+});
+const rgbToNum = c => (c.r << 16) | (c.g << 8) | c.b;
+
+// soft-light blending has a dead zone near 50% grey — a source channel value
+// close to 128 barely changes the destination at all. Stops need real
+// saturation (channels pushed well away from 128 in both directions) or
+// they just fade out against the light-paper sections; muted mid-tones
+// like a plain "#5C89A0" steel effectively vanished here.
+const COLOR_STOPS = [
+  { at: 0.00, rgb: hexToRgb('#E8A15C') }, // hero (dark)
+  { at: 0.20, rgb: hexToRgb('#1E6E8F') }, // thesis (light) — saturated teal-steel
+  { at: 0.40, rgb: hexToRgb('#B85C1F') }, // approach (light) — ember
+  { at: 0.60, rgb: hexToRgb('#14526B') }, // build (light) — deep saturated teal
+  { at: 0.80, rgb: hexToRgb('#D98F52') }, // services (light) — warm ember
+  { at: 1.00, rgb: hexToRgb('#E8A15C') }, // contact (dark)
+];
+
+function colorAt(progress) {
+  const p = clamp(progress, 0, 1);
+  for (let i = 0; i < COLOR_STOPS.length - 1; i++) {
+    const a = COLOR_STOPS[i];
+    const b = COLOR_STOPS[i + 1];
+    if (p >= a.at && p <= b.at) {
+      const t = (p - a.at) / (b.at - a.at || 1);
+      return rgbToNum(lerpRgb(a.rgb, b.rgb, t));
+    }
+  }
+  return rgbToNum(COLOR_STOPS[COLOR_STOPS.length - 1].rgb);
+}
 
 // True forward dive: the viewport is pinned (position: sticky) and stays
 // visually still, while scroll drives a virtual camera through a sequence
@@ -70,24 +113,28 @@ export function useDiveScene() {
     lenisRef.current = lenis;
     const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
+    const NET_BASE_OPTIONS = {
+      points: 9,
+      maxDistance: 20,
+      spacing: 17,
+      backgroundAlpha: 0,
+      showDots: true,
+      mouseControls: false,
+      touchControls: false,
+      gyroControls: false,
+      minHeight: 200,
+      minWidth: 200,
+      scale: 1,
+      scaleMobile: 1,
+    };
+
     let vanta = null;
     if (bgRef.current) {
       vanta = NET({
         el: bgRef.current,
         THREE,
-        color: hexToNum(NET_TINT),
-        points: 9,
-        maxDistance: 20,
-        spacing: 17,
-        backgroundAlpha: 0,
-        showDots: true,
-        mouseControls: false,
-        touchControls: false,
-        gyroControls: false,
-        minHeight: 200,
-        minWidth: 200,
-        scale: 1,
-        scaleMobile: 1,
+        color: colorAt(0),
+        ...NET_BASE_OPTIONS,
       });
     }
 
@@ -96,6 +143,8 @@ export function useDiveScene() {
     const homeWindow = step * 1.15; // overlap either side of a layer's "home" scroll position
     const prevNorm = new Array(n).fill(NaN);
     const prevActive = new Array(n).fill(false);
+    let prevColor = NaN;
+    let lastColorUpdate = 0;
 
     let raf = null;
 
@@ -111,6 +160,19 @@ export function useDiveScene() {
       const rect = track.getBoundingClientRect();
       const scrollable = rect.height - window.innerHeight;
       const progress = clamp(scrollable > 0 ? -rect.top / scrollable : 0, 0, 1);
+
+      if (vanta && time - lastColorUpdate > 80) {
+        const col = colorAt(progress);
+        if (col !== prevColor) {
+          prevColor = col;
+          lastColorUpdate = time;
+          // Pass the full option set, not just { color } — a partial object
+          // appeared to reset the rest (points/spacing/maxDistance) back
+          // toward defaults, which was silently blanking the net out at
+          // some scroll depths.
+          vanta.setOptions({ color: col, ...NET_BASE_OPTIONS });
+        }
+      }
 
       layers.forEach((el, i) => {
         const home = i * step;
